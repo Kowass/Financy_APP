@@ -1,6 +1,6 @@
-# financy_app
+# Financy App
 
-A new Flutter project.
+Um projeto Flutter de um aplicativo financeiro para ajudar a manter controle sobre os gastos e ter uma visualização gráfica dos mesmos.
 
 ## Getting Started
 
