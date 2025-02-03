@@ -12,7 +12,6 @@ class OnboardingPage extends StatelessWidget {
       body: Column(
         children: [
           Expanded(
-            flex: 2,
             child: Container(
               color: AppColors.iceWhite,
               child: Padding(
