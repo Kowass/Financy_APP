@@ -35,7 +35,7 @@ class OnboardingPage extends StatelessWidget {
           ),
           Padding(
             padding: const EdgeInsets.all(16.0),
-            child: PrimayButton(
+            child: PrimaryButton(
               text: "Get Started",
               onPressed: () {},
             ),

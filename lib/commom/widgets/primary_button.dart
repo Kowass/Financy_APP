@@ -2,10 +2,10 @@ import 'package:financy_app/commom/constants/app_colors.dart';
 import 'package:financy_app/commom/constants/app_text_styles.dart';
 import 'package:flutter/material.dart';
 
-class PrimayButton extends StatelessWidget {
+class PrimaryButton extends StatelessWidget {
   final VoidCallback? onPressed;
   final String text;
-  const PrimayButton({
+  const PrimaryButton({
     super.key,
     this.onPressed,
     required this.text,

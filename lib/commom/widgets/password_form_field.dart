@@ -12,6 +12,8 @@ class PasswordFormField extends StatefulWidget {
   final TextInputAction? textInputAction;
   final Widget? sufixIcon;
   final bool? obscureText;
+  final FormFieldValidator<String>? validator;
+  final String? helperText;
 
   const PasswordFormField({
     super.key,
@@ -25,6 +27,8 @@ class PasswordFormField extends StatefulWidget {
     this.textInputAction,
     this.sufixIcon,
     this.obscureText,
+    this.validator,
+    this.helperText,
   });
 
   @override
@@ -43,6 +47,8 @@ class _PasswordFormFieldState extends State<PasswordFormField> {
       hintText: widget.hintText,
       padding: widget.padding,
       textCapitalization: widget.textCapitalization,
+      validator: widget.validator,
+      helperText: widget.helperText,
       sufixIcon: InkWell(
         borderRadius: BorderRadius.circular(23.0),
         onTap: () {
