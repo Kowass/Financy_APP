@@ -81,6 +81,7 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
         validator: widget.validator,
         decoration: InputDecoration(
           helperMaxLines: 3,
+          errorMaxLines: 3,
           helperText: widget.helperText,
           suffixIcon: widget.sufixIcon,
           hintText: widget.hintText,
