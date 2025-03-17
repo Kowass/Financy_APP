@@ -2,6 +2,8 @@ import 'package:financy_app/commom/constants/app_colors.dart';
 import 'package:financy_app/commom/constants/app_text_styles.dart';
 import 'package:financy_app/commom/utils/uppercase_text_formatter.dart';
 import 'package:financy_app/commom/utils/validator.dart';
+import 'package:financy_app/commom/widgets/custom_bottom_sheet.dart';
+import 'package:financy_app/commom/widgets/custom_circular_progress_indicator.dart';
 import 'package:financy_app/commom/widgets/custom_text_form_field.dart';
 import 'package:financy_app/commom/widgets/password_form_field.dart';
 import 'package:financy_app/commom/widgets/primary_button.dart';
@@ -30,9 +32,7 @@ class _SignUpPageState extends State<SignUpPage> {
       if (_controller.state is SignUpLoadingState) {
         showDialog(
           context: context,
-          builder: (builder) => const Center(
-            child: CircularProgressIndicator(),
-          ),
+          builder: (builder) => const CustomCircularProgressIndicator(),
         );
       }
       if (_controller.state is SignUpSuccessState) {
@@ -47,6 +47,8 @@ class _SignUpPageState extends State<SignUpPage> {
             ),
           ),
         );
+      } else if (_controller.state is SignUpErrorState) {
+        customModalBottomSheet(context);
       }
     });
   }
@@ -133,3 +135,5 @@ class _SignUpPageState extends State<SignUpPage> {
     );
   }
 }
+
+
