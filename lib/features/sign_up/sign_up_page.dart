@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:financy_app/commom/constants/app_colors.dart';
 import 'package:financy_app/commom/constants/app_text_styles.dart';
 import 'package:financy_app/commom/utils/uppercase_text_formatter.dart';
@@ -9,6 +11,7 @@ import 'package:financy_app/commom/widgets/password_form_field.dart';
 import 'package:financy_app/commom/widgets/primary_button.dart';
 import 'package:financy_app/features/sign_up/sign_up_controller.dart';
 import 'package:financy_app/features/sign_up/sign_up_state.dart';
+import 'package:financy_app/services/mock_auth_service.dart';
 import 'package:flutter/material.dart';
 
 import '../../commom/widgets/multi_text_button.dart';
@@ -23,7 +26,18 @@ class SignUpPage extends StatefulWidget {
 class _SignUpPageState extends State<SignUpPage> {
   final _formKey = GlobalKey<FormState>();
   final _passwordController = TextEditingController();
-  final _controller = SignUpController();
+  final _nameController = TextEditingController();
+  final _emailController = TextEditingController();
+  final _controller = SignUpController(MockAuthService());
+
+  @override
+  void dispose() {
+    _nameController.dispose();
+    _emailController.dispose();
+    _passwordController.dispose();
+    _controller.dispose();
+    super.dispose();
+  }
 
   @override
   void initState() {
@@ -48,7 +62,9 @@ class _SignUpPageState extends State<SignUpPage> {
           ),
         );
       } else if (_controller.state is SignUpErrorState) {
-        customModalBottomSheet(context);
+        final error = _controller.state as SignUpErrorState;
+        Navigator.pop(context);
+        customModalBottomSheet(context: context, content: error.message, buttonText: "Tentar novamente");
       }
     });
   }
@@ -64,6 +80,7 @@ class _SignUpPageState extends State<SignUpPage> {
             child: Column(
               children: [
                 CustomTextFormField(
+                  controller: _nameController,
                   labelText: "your name",
                   hintText: "Felipe Alves",
                   inputFormatters: [
@@ -71,7 +88,8 @@ class _SignUpPageState extends State<SignUpPage> {
                   ],
                   validator: Validator.validateName,
                 ),
-                const CustomTextFormField(
+                CustomTextFormField(
+                  controller: _emailController,
                   labelText: "your email",
                   hintText: "your@email.com",
                   validator: Validator.validateEmail,
@@ -108,7 +126,13 @@ class _SignUpPageState extends State<SignUpPage> {
                 final valid = _formKey.currentState != null &&
                     _formKey.currentState!.validate();
                 if (valid) {
-                  _controller.doSignUp();
+                  _controller.signUp(
+                    name: _nameController.text,
+                    email: _emailController.text,
+                    password: _passwordController.text,
+                  );
+                } else {
+                  log('erro ao logar');
                 }
               },
             ),

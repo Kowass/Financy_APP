@@ -2,7 +2,7 @@ import 'package:financy_app/commom/constants/app_colors.dart';
 import 'package:financy_app/commom/widgets/primary_button.dart';
 import 'package:flutter/material.dart';
 
-Future<void> customModalBottomSheet(BuildContext context) {
+Future<void> customModalBottomSheet({required context, required String content, required String buttonText}) {
     return showModalBottomSheet<void>(
         context: context,
         shape: const RoundedRectangleBorder(
@@ -20,11 +20,11 @@ Future<void> customModalBottomSheet(BuildContext context) {
                 mainAxisAlignment: MainAxisAlignment.center,
                 mainAxisSize: MainAxisSize.min,
                 children: <Widget>[
-                  const Text('Ops. Algo deu errado.'),
+                  Text(content),
                   Padding(
                     padding: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 32.0),
                     child: PrimaryButton(
-                      text: 'Tentar novamente',
+                      text: buttonText,
                       onPressed: () => Navigator.pop(context),
                     ),
                   ),
