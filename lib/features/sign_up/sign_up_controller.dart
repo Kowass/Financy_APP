@@ -6,7 +6,7 @@ class SignUpController extends ChangeNotifier {
   final AuthService _service;
   SignUpController(this._service);
 
-  SignUpState _state = SignUpIntialState();
+  SignUpState _state = SignUpStateIntial();
   SignUpState get state => _state;
 
   void _changeState(SignUpState newState) {
@@ -14,16 +14,16 @@ class SignUpController extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future signUp({required String name, required String email, required String password}) async {
-    _changeState(SignUpLoadingState());
+  Future<void> signUp({required String name, required String email, required String password}) async {
+    _changeState(SignUpStateLoading());
 
     try {
       await _service.signUp(name: name,email: email, password: password);
 
-      _changeState(SignUpSuccessState());
+      _changeState(SignUpStateSuccess());
 
     } catch (e){
-      _changeState(SignUpErrorState(e.toString()));
+      _changeState(SignUpStateError(e.toString()));
     }
   }
 }

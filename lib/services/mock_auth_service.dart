@@ -3,9 +3,22 @@ import 'package:financy_app/services/auth_service.dart';
 
 class MockAuthService implements AuthService {
   @override
-  Future signIn() {
-    // TODO: implement signIn
-    throw UnimplementedError();
+  Future<UserModel> signIn({required String email, required String password}) async {
+    try {
+      await Future.delayed(const Duration(seconds: 2));
+      if (password.startsWith('123')) {
+        throw Exception();
+      }
+      return UserModel(
+        id: email.hashCode,
+        email: email,
+      );
+    } catch (e) {
+      if (password.startsWith('123')) {
+        throw 'Erro ao logar. Tente novamente.';
+      }
+      throw 'Náo foi possível realizar login nesse momento. Tente novamente mais tarde.';
+    }
   }
 
   @override
