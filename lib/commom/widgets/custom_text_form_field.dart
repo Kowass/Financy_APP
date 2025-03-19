@@ -42,6 +42,7 @@ class CustomTextFormField extends StatefulWidget {
 class _CustomTextFormFieldState extends State<CustomTextFormField> {
   final defaultBorder =
       OutlineInputBorder(borderSide: BorderSide(color: AppColors.greenTwo));
+  // ignore: unused_field
   String? _helperText;
 
   @override

@@ -193,3 +193,6 @@ build/flutter_assets/assets/images/The%20Little%20Things%20UI%20Design.png
 build/flutter_assets/fonts/MaterialIcons-Regular.otf
 build/flutter_assets/packages/cupertino_icons/assets/CupertinoIcons.ttf
 build/flutter_assets/shaders/ink_sparkle.frag
+.dart_tool/
+build/
+pubspec.lock
