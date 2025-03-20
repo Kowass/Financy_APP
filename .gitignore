@@ -196,3 +196,7 @@ build/flutter_assets/shaders/ink_sparkle.frag
 .dart_tool/
 build/
 pubspec.lock
+.vscode/settings.json
+linux/flutter/generated_plugin_registrant.cc
+linux/flutter/generated_plugin_registrant.h
+linux/flutter/generated_plugins.cmake

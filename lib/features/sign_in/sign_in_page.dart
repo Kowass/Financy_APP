@@ -12,7 +12,6 @@ import 'package:financy_app/commom/widgets/primary_button.dart';
 import 'package:financy_app/features/sign_in/sign_in_controller.dart';
 import 'package:financy_app/features/sign_in/sign_in_state.dart';
 import 'package:financy_app/locator.dart';
-import 'package:financy_app/services/mock_auth_service.dart';
 import 'package:flutter/material.dart';
 
 import '../../commom/widgets/multi_text_button.dart';
