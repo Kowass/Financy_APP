@@ -1,4 +1,3 @@
-import 'dart:async';
 import 'package:financy_app/commom/constants/app_colors.dart';
 import 'package:financy_app/commom/constants/app_text_styles.dart';
 import 'package:financy_app/commom/routes/routes.dart';
@@ -6,7 +5,6 @@ import 'package:financy_app/commom/widgets/custom_circular_progress_indicator.da
 import 'package:financy_app/features/splash/splash_controller.dart';
 import 'package:financy_app/features/splash/splash_state.dart';
 import 'package:financy_app/locator.dart';
-import 'package:financy_app/services/secure_storage.dart';
 import 'package:flutter/material.dart';
 
 class SplashPage extends StatefulWidget {
@@ -24,7 +22,7 @@ class _SplashPageState extends State<SplashPage> {
     _splashController.isUserLogged();
     _splashController.addListener((){
       if(_splashController.state is SplashStateSuccess){
-
+        Navigator.pushReplacementNamed(context, NamedRoute.home);
       }else{
         navigateOnboarding();
       }

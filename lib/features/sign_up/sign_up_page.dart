@@ -43,34 +43,30 @@ class _SignUpPageState extends State<SignUpPage> {
   @override
   void initState() {
     super.initState();
-    _controller.addListener(() {
-      if (_controller.state is SignUpStateLoading) {
-        showDialog(
-          context: context,
-          builder: (builder) => const CustomCircularProgressIndicator(),
-        );
-      }
-      if (_controller.state is SignUpStateSuccess) {
-        Navigator.pop(context);
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (builder) => const Scaffold(
-              body: Center(
-                child: Text("Nova Tela após login!"),
-              ),
-            ),
-          ),
-        );
-      } else if (_controller.state is SignUpStateError) {
-        final error = _controller.state as SignUpStateError;
-        Navigator.pop(context);
-        customModalBottomSheet(
+    _controller.addListener(
+      () {
+        if (_controller.state is SignUpStateLoading) {
+          showDialog(
+            context: context,
+            builder: (builder) => const CustomCircularProgressIndicator(),
+          );
+        }
+        if (_controller.state is SignUpStateSuccess) {
+          Navigator.pop(context);
+          Navigator.pushReplacementNamed(context, NamedRoute.home);
+          
+        } else if (_controller.state is SignUpStateError) {
+          final error = _controller.state as SignUpStateError;
+          Navigator.pop(context);
+
+          customModalBottomSheet(
             context: context,
             content: error.message,
-            buttonText: "Tentar novamente");
-      }
-    });
+            buttonText: "Tentar novamente",
+          );
+        }
+      },
+    );
   }
 
   @override
