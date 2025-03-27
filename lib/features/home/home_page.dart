@@ -1,4 +1,5 @@
 import 'package:financy_app/commom/routes/routes.dart';
+import 'package:financy_app/features/home/home_controller.dart';
 import 'package:financy_app/services/secure_storage.dart';
 import 'package:flutter/material.dart';
 
@@ -10,7 +11,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  final _secureStorage = const SecureStorage();
+  final pageController = HomeController();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -18,14 +19,6 @@ class _HomePageState extends State<HomePage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text("Nova Tela"),
-            ElevatedButton(
-              onPressed: () async {
-                _secureStorage.deleteOne(key: "CURRENT_USER");
-                Navigator.popAndPushNamed(context, NamedRoute.initial);
-              },
-              child: const Text("Logout"),
-            ),
           ],
         ),
       ),
