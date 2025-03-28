@@ -17,11 +17,23 @@ class Sizes {
 
   static void init(
     BuildContext context, {
-      Size designSize = _designSize,
-    }
-  ){
+    Size designSize = _designSize,
+  }) {
     final deviceData = MediaQuery.maybeOf(context);
 
     final deviceSize = deviceData?.size ?? _designSize;
+
+    _instance._height = deviceSize.height;
+    _instance._width = deviceSize.width;
+  }
+}
+
+extension SizeExt on num {
+  double get w {
+    return (this * Sizes._instance._height) / Sizes._designSize.height;
+  }
+
+  double get h {
+    return (this * Sizes._instance._width) / Sizes._designSize.width;
   }
 }

@@ -1,5 +1,6 @@
 import 'package:financy_app/commom/constants/app_colors.dart';
 import 'package:financy_app/commom/constants/app_text_styles.dart';
+import 'package:financy_app/commom/extensions/sizes.dart';
 import 'package:financy_app/commom/routes/routes.dart';
 import 'package:financy_app/commom/widgets/custom_circular_progress_indicator.dart';
 import 'package:financy_app/features/splash/splash_controller.dart';
@@ -19,6 +20,9 @@ class _SplashPageState extends State<SplashPage> {
   @override
   void initState() {
     super.initState();
+
+    WidgetsBinding.instance.addPersistentFrameCallback((_)=> Sizes.init(context));
+    
     _splashController.isUserLogged();
     _splashController.addListener((){
       if(_splashController.state is SplashStateSuccess){

@@ -1,5 +1,4 @@
 import 'package:financy_app/commom/routes/routes.dart';
-import 'package:financy_app/features/home/home_page.dart';
 import 'package:financy_app/features/home/home_page_view.dart';
 import 'package:financy_app/features/onboarding/onboarding.dart';
 import 'package:financy_app/features/profile/profile_page.dart';
@@ -17,7 +16,7 @@ class App extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      initialRoute: NamedRoute.splash,
+      initialRoute: NamedRoute.home,
       routes: {
         NamedRoute.initial: (context) => const OnboardingPage(),
         NamedRoute.splash: (context) => const SplashPage(),
