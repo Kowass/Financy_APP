@@ -18,12 +18,12 @@ class GreetingsWidget extends StatelessWidget {
         Text(
           'Good afternoon',
           textScaler: _textScaler,
-          style: AppTextStyles.mediumText.apply(color: const Color.fromARGB(255, 82, 35, 35)),
+          style: AppTextStyles.smallText.apply(color: const Color.fromARGB(255, 82, 35, 35)),
         ),
         Text(
           'Ejelin Morgeana',
           textScaler: _textScaler,
-          style: AppTextStyles.mediumText.apply(color: AppColors.white),
+          style: AppTextStyles.mediumText20.apply(color: AppColors.white),
         ),
       ],
     );
