@@ -28,7 +28,6 @@ class _HomePageState extends State<HomePage> {
     super.initState();
 
     controller.getAllTransaction();
-    log('Width: ${Sizes().width}, Height: ${Sizes().height}'); // Verificação de valores
   }
 
   @override

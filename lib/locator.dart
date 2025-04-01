@@ -9,6 +9,8 @@ import 'package:financy_app/services/graphql_service.dart';
 import 'package:financy_app/services/secure_storage.dart';
 import 'package:get_it/get_it.dart';
 
+
+
 final locator = GetIt.instance;
 
 void setupDependencies() {
@@ -37,6 +39,7 @@ void setupDependencies() {
 
   locator.registerFactory<TransactionRepository>(
       () => TransactionRepositoryImpl());
+
   locator.registerLazySingleton<HomeController>(
       () => HomeController(locator.get<TransactionRepository>()));
 }
