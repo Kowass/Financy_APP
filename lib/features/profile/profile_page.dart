@@ -1,3 +1,4 @@
+import 'package:financy_app/commom/constants/app_colors.dart';
 import 'package:financy_app/locator.dart';
 import 'package:financy_app/services/auth_service.dart';
 import 'package:financy_app/services/secure_storage.dart';
@@ -19,6 +20,7 @@ class _ProfilePageState extends State<ProfilePage>
     return Scaffold(
       body: Center(
         child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text('Profile'),
             TextButton(
@@ -29,7 +31,7 @@ class _ProfilePageState extends State<ProfilePage>
                   Navigator.popUntil(context, ModalRoute.withName("/"));
                 }
               },
-              child: Text("Logout"),
+              child: Text("Logout", style: TextStyle(color: AppColors.antiFlashWhite ,backgroundColor: AppColors.darkGreen),),
             ),
           ],
         ),

@@ -21,7 +21,6 @@ class BalanceCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    double iconSize = MediaQuery.of(context).size.width <= 360 ? 16.0 : 24.0;
     TextScaler textScaler = MediaQuery.of(context).size.width <= 360
         ? TextScaler.linear(0.8)
         : TextScaler.linear(1.0);

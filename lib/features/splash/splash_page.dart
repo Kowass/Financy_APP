@@ -21,7 +21,7 @@ class _SplashPageState extends State<SplashPage> {
   void initState() {
     super.initState();
 
-    WidgetsBinding.instance.addPersistentFrameCallback((_)=> Sizes.init(context));
+    WidgetsBinding.instance.addPostFrameCallback((_)=> Sizes.init(context));
     
     _splashController.isUserLogged();
     _splashController.addListener((){

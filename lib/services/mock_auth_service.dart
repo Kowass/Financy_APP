@@ -47,4 +47,8 @@ class MockAuthService implements AuthService {
     // TODO: implement signOut
     throw UnimplementedError();
   }
+  
+  @override
+  // TODO: implement userToken
+  Future<String> get userToken => throw UnimplementedError();
 }

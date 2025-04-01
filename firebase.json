@@ -1,1 +1,36 @@
-{"flutter":{"platforms":{"android":{"default":{"projectId":"financy-app-803d6","appId":"1:749047802790:android:3e2ca334a7505586adfd67","fileOutput":"android/app/google-services.json"}},"dart":{"lib/firebase_options.dart":{"projectId":"financy-app-803d6","configurations":{"android":"1:749047802790:android:3e2ca334a7505586adfd67","ios":"1:749047802790:ios:8925c49c9815885aadfd67","web":"1:749047802790:web:6c12cde4542c9610adfd67"}}}}}}
+{
+  "flutter": {
+    "platforms": {
+      "android": {
+        "default": {
+          "projectId": "financy-app-803d6",
+          "appId": "1:749047802790:android:3e2ca334a7505586adfd67",
+          "fileOutput": "android/app/google-services.json"
+        }
+      },
+      "dart": {
+        "lib/firebase_options.dart": {
+          "projectId": "financy-app-803d6",
+          "configurations": {
+            "android": "1:749047802790:android:3e2ca334a7505586adfd67",
+            "ios": "1:749047802790:ios:8925c49c9815885aadfd67",
+            "web": "1:749047802790:web:6c12cde4542c9610adfd67"
+          }
+        }
+      }
+    }
+  },
+  "functions": [
+    {
+      "source": "functions",
+      "codebase": "default",
+      "ignore": [
+        "node_modules",
+        ".git",
+        "firebase-debug.log",
+        "firebase-debug.*.log",
+        "*.local"
+      ]
+    }
+  ]
+}

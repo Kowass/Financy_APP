@@ -1,9 +1,14 @@
+import 'dart:developer';
+
+import 'package:cloud_functions/cloud_functions.dart';
 import 'package:financy_app/commom/models/user_model.dart';
 import 'package:financy_app/services/auth_service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class FirebaseAuthService implements AuthService {
   final _auth = FirebaseAuth.instance;
+  final _functions = FirebaseFunctions.instance;
+
   @override
   Future<UserModel> signIn({
     required String email,
@@ -35,10 +40,21 @@ class FirebaseAuthService implements AuthService {
     required String password,
   }) async {
     try {
-      final result = await _auth.createUserWithEmailAndPassword(
-          email: email, password: password);
+      await _functions.httpsCallable('registerUser').call({
+        "email": email,
+        "password": password,
+        "displayName": name,
+      });
+
+      final result = await _auth.signInWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
+
       if (result.user != null) {
-        result.user!.updateDisplayName(name);
+        log(await _auth.currentUser?.getIdToken(true) ?? 'nulo');
+
+        await result.user!.updateDisplayName(name);
         return UserModel(
           name: _auth.currentUser?.displayName,
           email: _auth.currentUser?.email,
@@ -49,15 +65,31 @@ class FirebaseAuthService implements AuthService {
       }
     } on FirebaseAuthException catch (e) {
       throw e.message ?? "null";
+    } on FirebaseFunctionsException catch (e) {
+      throw e.message ?? "null";
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  @override
+  Future<void> signOut() async {
+    try {
+      await _auth.signOut();
     } catch (e) {
       rethrow;
     }
   }
   
   @override
-  Future<void> signOut() async{
+  Future<String?> get userToken async {
     try {
-      await _auth.signOut();
+      final token = await _auth.currentUser?.getIdToken();
+      if(token != null){
+        return token;
+      } else{
+        throw Exception('User not found');
+      }
     } catch (e) {
       rethrow;
     }

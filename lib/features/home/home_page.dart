@@ -26,8 +26,6 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance
-        .addPersistentFrameCallback((_) => Sizes.init(context));
 
     controller.getAllTransaction();
     log('Width: ${Sizes().width}, Height: ${Sizes().height}'); // Verificação de valores
@@ -39,7 +37,7 @@ class _HomePageState extends State<HomePage> {
       body: Stack(
         children: [
           const AppHeader(),
-          BalanceCard(totalAmount: 123123.0, incomeAmount: 13123.0, outcomeAmount: 12312.0,),
+          BalanceCard(totalAmount: 123123.0, incomeAmount: 123.0, outcomeAmount: -122.0,),
           Positioned(
             top: 387.h,
             left: 0,
@@ -83,7 +81,7 @@ class _HomePageState extends State<HomePage> {
                         }
                         return TransactionListView(
                           transactionList: controller.transactions,
-                          itemCount: 5,
+                          itemCount: controller.transactions.length,
                         );
                       }),
                 ),
