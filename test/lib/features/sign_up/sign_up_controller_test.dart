@@ -18,7 +18,7 @@ void main() {
     mockGraphQLService = MockGraphQLService();
 
     signUpController =
-        SignUpController(service: mockFirebaseAuthService, graphQLClient: mockGraphQLService, secureStorage: mockSecureStorage);
+        SignUpController(authService: mockFirebaseAuthService, graphQLService: mockGraphQLService, secureStorage: mockSecureStorage);
         
     user = UserModel(
       name: "User",

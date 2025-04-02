@@ -8,13 +8,13 @@ import 'package:financy_app/services/auth_service.dart';
 import 'package:financy_app/services/secure_storage.dart';
 
 class SignUpController extends ChangeNotifier {
-  final AuthService service;
+  final AuthService authService;
   final SecureStorage secureStorage;
-  final GraphQLService graphQLClient;
+  final GraphQLService graphQLService;
   SignUpController({
-    required this.service,
+    required this.authService,
     required this.secureStorage,
-    required this.graphQLClient,
+    required this.graphQLService,
   });
 
   SignUpState _state = SignUpStateIntial();
@@ -33,7 +33,7 @@ class SignUpController extends ChangeNotifier {
     _changeState(SignUpStateLoading());
 
     try {
-      final user = await service.signUp(
+      final user = await authService.signUp(
         name: name,
         email: email,
         password: password,
@@ -43,7 +43,7 @@ class SignUpController extends ChangeNotifier {
           key: "CURRENT_USER",
           value: user.toJson(),
         );
-        await graphQLClient.init();
+        await graphQLService.init();
         _changeState(SignUpStateSuccess());
       } else {
         throw Exception();

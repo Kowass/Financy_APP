@@ -1,12 +1,20 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'package:flutter/foundation.dart';
+
 import 'package:financy_app/features/sign_in/sign_in_state.dart';
 import 'package:financy_app/services/auth_service.dart';
+import 'package:financy_app/services/graphql_service.dart';
 import 'package:financy_app/services/secure_storage.dart';
-import 'package:flutter/foundation.dart';
-//TODO: import states
 
 class SignInController extends ChangeNotifier {
-  final AuthService _service;
-  SignInController(this._service);
+  final SecureStorage secureStorage;
+  final AuthService authService;
+  final GraphQLService graphQLService;
+  SignInController({
+    required this.secureStorage,
+    required this.authService,
+    required this.graphQLService,
+  });
 
   SignInState _state = SignInStateInitial();
 
@@ -17,17 +25,25 @@ class SignInController extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> signIn({required String email, required String password}) async {
-    final secureStorage = const SecureStorage();
+  Future<void> signIn({
+    required String email,
+    required String password,
+  }) async {
     _changeState(SignInStateLoading());
 
     try {
-      final user = await _service.signIn(email: email, password: password);
+      final user = await authService.signIn(
+        email: email,
+        password: password,
+      );
 
-      if(user.id != null){
-        secureStorage.write(key: "CURRENT_USER", value: user.toJson());
-      _changeState(SignInStateSuccess());
-      }else{
+      if (user.id != null) {
+        await secureStorage.write(key: "CURRENT_USER", value: user.toJson());
+
+        await graphQLService.init();
+
+        _changeState(SignInStateSuccess());
+      } else {
         throw Exception();
       }
     } catch (e) {

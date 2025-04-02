@@ -9,37 +9,47 @@ import 'package:financy_app/services/graphql_service.dart';
 import 'package:financy_app/services/secure_storage.dart';
 import 'package:get_it/get_it.dart';
 
-
-
 final locator = GetIt.instance;
 
 void setupDependencies() {
-  locator.registerFactory<AuthService>(() => FirebaseAuthService());
+  locator.registerFactory<AuthService>(
+    () => FirebaseAuthService(),
+  );
+
+  locator.registerLazySingleton<GraphQLService>(
+    () => GraphQLService(
+      authService: locator.get<AuthService>(),
+    ),
+  );
 
   locator.registerFactory<SplashController>(
     () => SplashController(
-      const SecureStorage(),
-    ),
+        secureStorage: const SecureStorage(),
+        graphQLService: locator.get<GraphQLService>()),
   );
   locator.registerFactory<SignInController>(
     () => SignInController(
-      locator.get<AuthService>(),
+      authService: locator.get<AuthService>(),
+      graphQLService: locator.get<GraphQLService>(),
+      secureStorage: const SecureStorage(),
     ),
   );
 
-  locator.registerLazySingleton<GraphQLService>(() => GraphQLService(authService: locator.get<AuthService>(),),);
-
   locator.registerFactory<SignUpController>(
     () => SignUpController(
-      service: locator.get<AuthService>(),
+      authService: locator.get<AuthService>(),
       secureStorage: SecureStorage(),
-      graphQLClient: locator.get<GraphQLService>(),
+      graphQLService: locator.get<GraphQLService>(),
     ),
   );
 
   locator.registerFactory<TransactionRepository>(
-      () => TransactionRepositoryImpl());
+    () => TransactionRepositoryImpl(),
+  );
 
   locator.registerLazySingleton<HomeController>(
-      () => HomeController(locator.get<TransactionRepository>()));
+    () => HomeController(
+      locator.get<TransactionRepository>(),
+    ),
+  );
 }

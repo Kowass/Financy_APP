@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:financy_app/services/auth_service.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 
@@ -10,6 +12,7 @@ class GraphQLService {
 
   Future<void> init() async {
     final token = await authService.userToken;
+    log("Token de usuário: $token");
 
     final HttpLink httpLink = HttpLink(
     'https://giving-cougar-45.hasura.app/v1/graphql',
@@ -23,7 +26,7 @@ class GraphQLService {
 
   client = GraphQLClient(
       link: link,
-      cache: GraphQLCache(store: HiveStore()),
+      cache: GraphQLCache(store: InMemoryStore()),
     );
   }
 }

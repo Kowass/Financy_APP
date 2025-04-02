@@ -5,7 +5,6 @@ class MockAuthService implements AuthService {
   @override
   Future<UserModel> signIn({required String email, required String password}) async {
     try {
-      await Future.delayed(const Duration(seconds: 2));
       if (password.startsWith('123')) {
         throw Exception();
       }
@@ -25,7 +24,6 @@ class MockAuthService implements AuthService {
   Future<UserModel> signUp(
       {String? name, required String email, required String password}) async {
     try {
-      await Future.delayed(const Duration(seconds: 2));
       if (password.startsWith('123')) {
         throw Exception();
       }

@@ -41,7 +41,7 @@ class TransactionListView extends StatelessWidget {
             ),
           ),
           title: Text(
-            item.title,
+            item.description,
             style: AppTextStyles.mediumText16w500,
           ),
           subtitle: Text(

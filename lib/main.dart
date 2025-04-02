@@ -12,8 +12,6 @@ void main() async{
     options: DefaultFirebaseOptions.currentPlatform,
   );
 
-  await initHiveForFlutter();
-
   setupDependencies();
 
   await locator.allReady();
