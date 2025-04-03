@@ -26,6 +26,10 @@ class GraphQLService {
 
   client = GraphQLClient(
       link: link,
+      defaultPolicies: DefaultPolicies(
+        query: Policies(fetch: FetchPolicy.networkOnly),
+        mutate: Policies(fetch: FetchPolicy.networkOnly),
+      ),
       cache: GraphQLCache(store: InMemoryStore()),
     );
   }

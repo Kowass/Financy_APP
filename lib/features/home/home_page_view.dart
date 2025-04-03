@@ -2,12 +2,14 @@ import 'dart:developer';
 
 import 'package:financy_app/commom/constants/app_colors.dart';
 import 'package:financy_app/commom/widgets/custom_bottom_app_bar.dart';
+import 'package:financy_app/features/home/home_controller.dart';
 import 'package:financy_app/features/home/home_page.dart';
+import 'package:financy_app/features/home/widgets/balance_card_widget_controller.dart';
 import 'package:financy_app/features/profile/profile_page.dart';
 import 'package:financy_app/features/stats/stats_page.dart';
 import 'package:financy_app/features/wallet/wallet_page.dart';
+import 'package:financy_app/locator.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 
 class HomePageView extends StatefulWidget {
   const HomePageView({super.key});
@@ -16,12 +18,18 @@ class HomePageView extends StatefulWidget {
   State<HomePageView> createState() => _HomePageViewState();
 }
 
-class _HomePageViewState extends State<HomePageView> 
+class _HomePageViewState extends State<HomePageView>
     with AutomaticKeepAliveClientMixin {
   @override
   bool get wantKeepAlive => true;
-  
+
   final pageController = PageController();
+
+  @override
+  void dispose() {
+    pageController.dispose();
+    super.dispose();
+  }
 
   @override
   void initState() {
@@ -45,8 +53,13 @@ class _HomePageViewState extends State<HomePageView>
         ],
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {},
-        backgroundColor: AppColors.greenTwo,
+        onPressed: () async {
+          final result = await Navigator.pushNamed(context, '/transaction');
+          if (result != null) {
+            locator.get<HomeController>().getAllTransactions();
+            locator.get<BalanceCardWidgetController>().getBalances();
+          }
+        },
         child: const Icon(Icons.add),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,

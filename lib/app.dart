@@ -1,4 +1,6 @@
+import 'package:financy_app/commom/models/transaction_model.dart';
 import 'package:financy_app/commom/routes/routes.dart';
+import 'package:financy_app/commom/themes/default_theme.dart';
 import 'package:financy_app/features/home/home_page_view.dart';
 import 'package:financy_app/features/onboarding/onboarding.dart';
 import 'package:financy_app/features/profile/profile_page.dart';
@@ -6,6 +8,7 @@ import 'package:financy_app/features/sign_in/sign_in_page.dart';
 import 'package:financy_app/features/sign_up/sign_up_page.dart';
 import 'package:financy_app/features/splash/splash_page.dart';
 import 'package:financy_app/features/stats/stats_page.dart';
+import 'package:financy_app/features/transactions/transaction_page.dart';
 import 'package:financy_app/features/wallet/wallet_page.dart';
 import 'package:flutter/material.dart';
 
@@ -15,6 +18,7 @@ class App extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      theme: CustomTheme().defaultTheme,
       debugShowCheckedModeBanner: false,
       initialRoute: NamedRoute.splash,
       routes: {
@@ -26,6 +30,12 @@ class App extends StatelessWidget {
         NamedRoute.profile: (context) => const ProfilePage(),
         NamedRoute.stats: (context) => const StatsPage(),
         NamedRoute.wallet: (context) => const WalletPage(),
+        NamedRoute.transaction: (context) {
+          final args = ModalRoute.of(context)?.settings.arguments;
+          return TransactionPage(
+            transaction: args != null ? args as TransactionModel : null,
+          );
+        },
       },
     );
   }

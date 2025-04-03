@@ -19,7 +19,7 @@ class HomeController extends ChangeNotifier {
    notifyListeners();
   }
 
-  Future<void> getAllTransaction()async{
+  Future<void> getAllTransactions()async{
     _changeState(HomeStateLoading());
 
     try {

@@ -1,3 +1,5 @@
+import 'package:financy_app/commom/constants/mutations/add_new_transactions.dart';
+import 'package:financy_app/commom/constants/mutations/update_transaction.dart';
 import 'package:financy_app/commom/constants/queries/get_all_transactions.dart';
 import 'package:financy_app/commom/constants/queries/get_balances.dart';
 import 'package:financy_app/commom/models/balances_model.dart';
@@ -7,7 +9,8 @@ import 'package:financy_app/services/graphql_service.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 
 abstract class TransactionRepository {
-  Future<void> addTransaction();
+  Future<bool> addTransaction(TransactionModel transaction, String userId);
+  Future<bool> updateTransaction(TransactionModel transaction);
   Future<List<TransactionModel>> getAllTransaction();
   Future<BalancesModel> getBalances();
 }
@@ -16,8 +19,57 @@ class TransactionRepositoryImpl implements TransactionRepository {
   final client = locator.get<GraphQLService>().client;
 
   @override
-  Future<void> addTransaction() {
-    throw UnimplementedError();
+  Future<bool> addTransaction(
+      TransactionModel transaction, String userId) async {
+    try {
+      final response = await client.query(
+        QueryOptions(variables: {
+          "category": transaction.category,
+          "date":
+              DateTime.fromMillisecondsSinceEpoch(transaction.date).toString(),
+          "description": transaction.description,
+          "status": transaction.status,
+          "value": transaction.value,
+          "user_id": userId,
+        }, document: gql(mAddNewTransaction)),
+      );
+      final parsedData = TransactionModel.fromMap(
+          response.data?["insert_transaction_one"] ?? {});
+
+      if (parsedData.id != null) {
+        return true;
+      }
+      throw Exception(response.exception);
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  @override
+  Future<bool> updateTransaction(TransactionModel transaction) async {
+    try {
+      final response = await client.query(QueryOptions(
+        variables: {
+          "id": transaction.id,
+          "category": transaction.category,
+          "date":
+              DateTime.fromMillisecondsSinceEpoch(transaction.date).toString(),
+          "description": transaction.description,
+          "status": transaction.status,
+          "value": transaction.value,
+        },
+        document: gql(mUpdateTransaction),
+      ));
+      final parsedData = TransactionModel.fromMap(
+          response.data?["update_transaction_by_pk"] ?? {});
+
+      if (parsedData.id != null) {
+        return true;
+      }
+      throw Exception(response.exception);
+    } catch (e) {
+      rethrow;
+    }
   }
 
   @override
