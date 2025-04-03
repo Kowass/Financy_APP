@@ -3,6 +3,7 @@ import 'package:financy_app/features/home/widgets/balance_card_widget_controller
 import 'package:financy_app/features/sign_in/sign_in_controller.dart';
 import 'package:financy_app/features/sign_up/sign_up_controller.dart';
 import 'package:financy_app/features/splash/splash_controller.dart';
+import 'package:financy_app/features/transactions/transaction_controller.dart';
 import 'package:financy_app/repositories/transaction_repository.dart';
 import 'package:financy_app/services/auth_service.dart';
 import 'package:financy_app/services/firebase_auth_service.dart';
@@ -59,4 +60,11 @@ void setupDependencies() {
       transactionRepository: locator.get<TransactionRepository>(),
     ),
   );
+
+  locator.registerFactory<TransactionController>(
+     () => TransactionController(
+       repository: locator.get<TransactionRepository>(),
+       storage: const SecureStorage(),
+     ),
+   );
 }

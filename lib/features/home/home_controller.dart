@@ -1,11 +1,11 @@
 import 'package:financy_app/commom/models/transaction_model.dart';
 import 'package:financy_app/features/home/home_state.dart';
 import 'package:financy_app/repositories/transaction_repository.dart';
-import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 
 class HomeController extends ChangeNotifier {
-   final TransactionRepository _transactionRepository;
-   HomeController(this._transactionRepository);
+  final TransactionRepository _transactionRepository;
+  HomeController(this._transactionRepository);
 
   HomeState _state = HomeStateInitial();
 
@@ -14,12 +14,19 @@ class HomeController extends ChangeNotifier {
   List<TransactionModel> _transactions = [];
   List<TransactionModel> get transactions => _transactions;
 
-  void _changeState(HomeState newState) {
-   _state = newState;
-   notifyListeners();
+  late PageController _pageController;
+  PageController get pageController => _pageController;
+
+  set setPageController(PageController newPageController) {
+    _pageController = newPageController;
   }
 
-  Future<void> getAllTransactions()async{
+  void _changeState(HomeState newState) {
+    _state = newState;
+    notifyListeners();
+  }
+
+  Future<void> getAllTransactions() async {
     _changeState(HomeStateLoading());
 
     try {
@@ -28,7 +35,5 @@ class HomeController extends ChangeNotifier {
     } catch (e) {
       _changeState(HomeStateError());
     }
-
   }
-
 }

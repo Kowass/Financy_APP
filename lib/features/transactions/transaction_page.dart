@@ -31,10 +31,7 @@ class TransactionPage extends StatefulWidget {
 
 class _TransactionPageState extends State<TransactionPage>
     with SingleTickerProviderStateMixin {
-  final _transactionController = TransactionController(
-    repository: locator.get<TransactionRepository>(),
-    storage: const SecureStorage(),
-  );
+  final _transactionController = locator.get<TransactionController>();
 
   final _formKey = GlobalKey<FormState>();
 
@@ -97,6 +94,7 @@ class _TransactionPageState extends State<TransactionPage>
     _descriptionController.dispose();
     _categoryController.dispose();
     _dateController.dispose();
+    _transactionController.dispose();
     super.dispose();
   }
 

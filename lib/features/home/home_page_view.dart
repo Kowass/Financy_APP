@@ -18,25 +18,24 @@ class HomePageView extends StatefulWidget {
   State<HomePageView> createState() => _HomePageViewState();
 }
 
-class _HomePageViewState extends State<HomePageView>
-    with AutomaticKeepAliveClientMixin {
-  @override
-  bool get wantKeepAlive => true;
+class _HomePageViewState extends State<HomePageView> {
+  final homeController = locator.get<HomeController>();
+  final balanceController =
+      locator.get<BalanceCardWidgetController>();
 
-  final pageController = PageController();
-
-  @override
-  void dispose() {
-    pageController.dispose();
-    super.dispose();
-  }
+  int current = 0;
 
   @override
   void initState() {
+    homeController.setPageController = PageController();
     super.initState();
-    pageController.addListener(() {
-      log(pageController.page.toString());
-    });
+  }
+
+  @override
+  void dispose() {
+    homeController.dispose();
+    balanceController.dispose();
+    super.dispose();
   }
 
   @override
@@ -44,7 +43,7 @@ class _HomePageViewState extends State<HomePageView>
     return Scaffold(
       body: PageView(
         physics: const NeverScrollableScrollPhysics(),
-        controller: pageController,
+        controller: homeController.pageController,
         children: const [
           HomePage(),
           StatsPage(),
@@ -56,19 +55,20 @@ class _HomePageViewState extends State<HomePageView>
         onPressed: () async {
           final result = await Navigator.pushNamed(context, '/transaction');
           if (result != null) {
-            locator.get<HomeController>().getAllTransactions();
-            locator.get<BalanceCardWidgetController>().getBalances();
+            homeController.getAllTransactions();
+            balanceController.getBalances();
           }
         },
         child: const Icon(Icons.add),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      bottomNavigationBar: CustomBottomAppBar(children: [
+      bottomNavigationBar:
+          CustomBottomAppBar(controller: homeController.pageController, children: [
         CustomBottomAppBarItem(
           label: 'home',
           primaryIcon: Icons.home,
           secondaryIcon: Icons.home_outlined,
-          onPressed: () => pageController.jumpToPage(
+          onPressed: () => homeController.pageController.jumpToPage(
             0,
           ),
         ),
@@ -76,7 +76,7 @@ class _HomePageViewState extends State<HomePageView>
           label: 'stats',
           primaryIcon: Icons.analytics,
           secondaryIcon: Icons.analytics_outlined,
-          onPressed: () => pageController.jumpToPage(
+          onPressed: () => homeController.pageController.jumpToPage(
             1,
           ),
         ),
@@ -85,7 +85,7 @@ class _HomePageViewState extends State<HomePageView>
           label: 'wallet',
           primaryIcon: Icons.account_balance_wallet,
           secondaryIcon: Icons.account_balance_wallet_outlined,
-          onPressed: () => pageController.jumpToPage(
+          onPressed: () => homeController.pageController.jumpToPage(
             2,
           ),
         ),
@@ -93,7 +93,7 @@ class _HomePageViewState extends State<HomePageView>
           label: 'profile',
           primaryIcon: Icons.person,
           secondaryIcon: Icons.person_outlined,
-          onPressed: () => pageController.jumpToPage(
+          onPressed: () => homeController.pageController.jumpToPage(
             3,
           ),
         ),

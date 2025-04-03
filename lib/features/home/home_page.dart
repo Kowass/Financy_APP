@@ -19,15 +19,13 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  
-  final controller = locator.get<HomeController>();
+  final homeController = locator.get<HomeController>();
   final balanceController = locator.get<BalanceCardWidgetController>();
 
   @override
   void initState() {
     super.initState();
-
-    controller.getAllTransactions();
+    homeController.getAllTransactions();
     balanceController.getBalances();
   }
 
@@ -37,7 +35,9 @@ class _HomePageState extends State<HomePage> {
       body: Stack(
         children: [
           const AppHeader(),
-          BalanceCard(controller: balanceController,),
+          BalanceCard(
+            controller: balanceController,
+          ),
           Positioned(
             top: 387.h,
             left: 0,
@@ -54,34 +54,39 @@ class _HomePageState extends State<HomePage> {
                         'Transation History',
                         style: AppTextStyles.mediumText18,
                       ),
-                      const Text(
-                        "See all",
-                        style: AppTextStyles.inputLabelText,
+                      GestureDetector(
+                        onTap: () {
+                          homeController.pageController.jumpToPage(2);
+                        },
+                        child: const Text(
+                          "See all",
+                          style: AppTextStyles.inputLabelText,
+                        ),
                       ),
                     ],
                   ),
                 ),
                 Expanded(
                   child: AnimatedBuilder(
-                      animation: controller,
+                      animation: homeController,
                       builder: (context, _) {
-                        if (controller.state is HomeStateLoading) {
+                        if (homeController.state is HomeStateLoading) {
                           return const CustomCircularProgressIndicator(
                               color: AppColors.green);
-                        } else if (controller.state is HomeStateError) {
+                        } else if (homeController.state is HomeStateError) {
                           return Center(
                             child: Text('An error has occurred.'),
                           );
                         }
-                        if (controller.transactions.isEmpty) {
+                        if (homeController.transactions.isEmpty) {
                           return Center(
                             child:
                                 Text('There is no transactions at this time.'),
                           );
                         }
                         return TransactionListView(
-                          transactionList: controller.transactions,
-                          itemCount: controller.transactions.length,
+                          transactionList: homeController.transactions,
+                          itemCount: homeController.transactions.length,
                         );
                       }),
                 ),
@@ -93,4 +98,3 @@ class _HomePageState extends State<HomePage> {
     );
   }
 }
-
