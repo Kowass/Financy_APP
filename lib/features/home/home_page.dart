@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:financy_app/commom/constants/app_colors.dart';
 import 'package:financy_app/commom/constants/app_text_styles.dart';
 import 'package:financy_app/commom/extensions/sizes.dart';
@@ -9,6 +7,7 @@ import 'package:financy_app/commom/widgets/transacation_listview.dart';
 import 'package:financy_app/features/home/home_controller.dart';
 import 'package:financy_app/features/home/home_state.dart';
 import 'package:financy_app/features/home/widgets/balance_card_widget.dart';
+import 'package:financy_app/features/home/widgets/balance_card_widget_controller.dart';
 import 'package:financy_app/locator.dart';
 import 'package:flutter/material.dart';
 
@@ -22,12 +21,14 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   
   final controller = locator.get<HomeController>();
+  final balanceController = locator.get<BalanceCardWidgetController>();
 
   @override
   void initState() {
     super.initState();
 
     controller.getAllTransaction();
+    balanceController.getBalances();
   }
 
   @override
@@ -36,7 +37,7 @@ class _HomePageState extends State<HomePage> {
       body: Stack(
         children: [
           const AppHeader(),
-          BalanceCard(totalAmount: 123123.0, incomeAmount: 123.0, outcomeAmount: -122.0,),
+          BalanceCard(controller: balanceController,),
           Positioned(
             top: 387.h,
             left: 0,

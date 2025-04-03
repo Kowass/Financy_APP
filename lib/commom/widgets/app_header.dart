@@ -5,7 +5,7 @@ import 'package:financy_app/commom/constants/app_colors.dart';
 import 'package:financy_app/commom/constants/app_text_styles.dart';
 import 'package:financy_app/commom/extensions/sizes.dart';
 import 'package:financy_app/commom/widgets/notification_widget.dart';
-import 'package:financy_app/features/home/widgets/greetings_widget.dart';
+import 'package:financy_app/commom/widgets/greetings_widget.dart';
 
 class AppHeader extends StatefulWidget {
   final String? title;

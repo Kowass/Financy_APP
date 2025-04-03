@@ -1,8 +1,6 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:financy_app/services/graphql_service.dart';
 import 'package:flutter/foundation.dart';
-import 'package:graphql_flutter/graphql_flutter.dart';
-
 import 'package:financy_app/features/sign_up/sign_up_state.dart';
 import 'package:financy_app/services/auth_service.dart';
 import 'package:financy_app/services/secure_storage.dart';
