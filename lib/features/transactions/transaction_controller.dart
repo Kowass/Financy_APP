@@ -38,7 +38,7 @@ class TransactionController extends ChangeNotifier {
         throw Exception('error');
       }
     } catch (e) {
-      _changeState(TransactionStateError());
+      _changeState(TransactionStateError(message: e.toString()));
     }
   }
 
@@ -53,7 +53,7 @@ class TransactionController extends ChangeNotifier {
         throw Exception('error');
       }
     } catch (e) {
-      _changeState(TransactionStateError());
+      _changeState(TransactionStateError(message: e.toString()));
     }
   }
 }

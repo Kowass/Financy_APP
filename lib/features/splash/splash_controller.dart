@@ -5,10 +5,9 @@ import 'package:flutter/foundation.dart';
 //TODO: import states
 
 class SplashController extends ChangeNotifier {
-  final GraphQLService graphQLService;
   final SecureStorage secureStorage;
 
-  SplashController({required this.secureStorage, required this.graphQLService});
+  SplashController({required this.secureStorage,});
 
   SplashState _state = SplashStateInitial();
 
@@ -23,7 +22,6 @@ class SplashController extends ChangeNotifier {
     final result = await secureStorage.readOne(key: "CURRENT_USER");
 
     if (result != null) {
-      await graphQLService.init();
       _changeState(SplashStateSuccess());
     } else {
       _changeState(SplashStateError());

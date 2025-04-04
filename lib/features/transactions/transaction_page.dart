@@ -9,6 +9,7 @@ import 'package:financy_app/commom/models/transaction_model.dart';
 import 'package:financy_app/commom/utils/money_mask_controller.dart';
 import 'package:financy_app/commom/widgets/app_header.dart';
 import 'package:financy_app/commom/widgets/custom_circular_progress_indicator.dart';
+import 'package:financy_app/commom/widgets/custom_snackbar.dart';
 import 'package:financy_app/commom/widgets/custom_text_form_field.dart';
 import 'package:financy_app/commom/widgets/primary_button.dart';
 import 'package:flutter/material.dart';
@@ -83,6 +84,11 @@ class _TransactionPageState extends State<TransactionPage>
       }
       if (_transactionController.state is TransactionStateSuccess) {
         Navigator.of(context).pop();
+      }
+      if(_transactionController.state is TransactionStateError){
+        final error = _transactionController.state as TransactionStateError;
+        showCustomSnackBar(context: 
+        context, text: error.message, type: SnackBarType.error);
       }
     });
   }

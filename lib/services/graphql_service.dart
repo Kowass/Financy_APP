@@ -14,16 +14,15 @@ class GraphQLService implements ApiService<GraphQLClient, QueryResult> {
   late GraphQLClient _client;
   GraphQLClient get client => _client;
 
-  Future<void> init() async {
-    final token = await authService.userToken;
-    log("Token de usuário: $token");
+  Future<GraphQLService> init() async {
+    await initHiveForFlutter();
 
     final HttpLink httpLink = HttpLink(
       'https://giving-cougar-45.hasura.app/v1/graphql',
     );
 
     final AuthLink authLink = AuthLink(
-      getToken: () async => 'Bearer $token',
+      getToken: () async => 'Bearer ${await authService.userToken}',
     );
 
     final Link link = authLink.concat(httpLink);
@@ -31,11 +30,17 @@ class GraphQLService implements ApiService<GraphQLClient, QueryResult> {
     _client = GraphQLClient(
       link: link,
       defaultPolicies: DefaultPolicies(
-        query: Policies(fetch: FetchPolicy.networkOnly),
-        mutate: Policies(fetch: FetchPolicy.networkOnly),
+        mutate: Policies(
+          fetch: FetchPolicy.cacheFirst,
+        ),
+        query: Policies(
+          fetch: FetchPolicy.cacheFirst,
+        ),
       ),
-      cache: GraphQLCache(store: InMemoryStore()),
+      cache: GraphQLCache(store: HiveStore()),
     );
+
+    return this;
   }
 
   @override

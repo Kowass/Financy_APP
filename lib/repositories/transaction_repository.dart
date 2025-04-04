@@ -6,36 +6,51 @@ import 'package:financy_app/commom/constants/queries/get_latest_transactions.dar
 import 'package:financy_app/commom/models/balances_model.dart';
 import 'package:financy_app/commom/models/transaction_model.dart';
 import 'package:financy_app/locator.dart';
+import 'package:financy_app/services/api_service.dart';
 import 'package:financy_app/services/graphql_service.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 
 abstract class TransactionRepository {
-  Future<bool> addTransaction(TransactionModel transaction, String userId);
+  Future<bool> addTransaction(
+    TransactionModel transaction,
+    String userId,
+  );
+
   Future<bool> updateTransaction(TransactionModel transaction);
-  Future<List<TransactionModel>> getAllTransactions(
-      {required int limit, required int offset});
+
+  Future<List<TransactionModel>> getAllTransactions({
+    required int limit,
+    required int offset,
+  });
+
   Future<List<TransactionModel>> getLatestTransactions();
+
   Future<BalancesModel> getBalances();
 }
 
 class TransactionRepositoryImpl implements TransactionRepository {
-  final client = locator.get<GraphQLService>().client;
+  final ApiService<GraphQLClient, QueryResult> graphqlService;
+
+  TransactionRepositoryImpl({
+    required this.graphqlService,
+  });
 
   @override
   Future<bool> addTransaction(
-      TransactionModel transaction, String userId) async {
+    TransactionModel transaction,
+    String userId,
+  ) async {
     try {
-      final response = await client.query(
-        QueryOptions(variables: {
-          "category": transaction.category,
-          "date":
-              DateTime.fromMillisecondsSinceEpoch(transaction.date).toString(),
-          "description": transaction.description,
-          "status": transaction.status,
-          "value": transaction.value,
-          "user_id": userId,
-        }, document: gql(mAddNewTransaction)),
-      );
+      final response = await graphqlService.create(params: {
+        "category": transaction.category,
+        "date":
+            DateTime.fromMillisecondsSinceEpoch(transaction.date).toString(),
+        "description": transaction.description,
+        "status": transaction.status,
+        "value": transaction.value,
+        "user_id": userId,
+      }, path: mAddNewTransaction);
+
       final parsedData = TransactionModel.fromMap(
           response.data?["insert_transaction_one"] ?? {});
 
@@ -51,18 +66,16 @@ class TransactionRepositoryImpl implements TransactionRepository {
   @override
   Future<bool> updateTransaction(TransactionModel transaction) async {
     try {
-      final response = await client.query(QueryOptions(
-        variables: {
-          "id": transaction.id,
-          "category": transaction.category,
-          "date":
-              DateTime.fromMillisecondsSinceEpoch(transaction.date).toString(),
-          "description": transaction.description,
-          "status": transaction.status,
-          "value": transaction.value,
-        },
-        document: gql(mUpdateTransaction),
-      ));
+      final response = await graphqlService.update(params: {
+        "id": transaction.id,
+        "category": transaction.category,
+        "date":
+            DateTime.fromMillisecondsSinceEpoch(transaction.date).toString(),
+        "description": transaction.description,
+        "status": transaction.status,
+        "value": transaction.value,
+      }, path: mUpdateTransaction);
+
       final parsedData = TransactionModel.fromMap(
           response.data?["update_transaction_by_pk"] ?? {});
 
@@ -79,15 +92,14 @@ class TransactionRepositoryImpl implements TransactionRepository {
   Future<List<TransactionModel>> getAllTransactions(
       {required int limit, required int offset}) async {
     try {
-      final response = await client.query(
-        QueryOptions(
-          document: gql(qGetAllTransactions),
-          variables: {
-            'limit': limit,
-            'offset': offset,
-          },
-        ),
+      final response = await graphqlService.read(
+        path: qGetAllTransactions,
+        params: {
+          'limit': limit,
+          'offset': offset,
+        },
       );
+
       final parsedData = List.from(response.data?['transaction'] ?? []);
       final transaction =
           parsedData.map((e) => TransactionModel.fromMap(e)).toList();
@@ -101,7 +113,7 @@ class TransactionRepositoryImpl implements TransactionRepository {
   Future<BalancesModel> getBalances() async {
     try {
       final response =
-          await client.query(QueryOptions(document: gql(qGetBalance)));
+          await graphqlService.read(path: qGetBalance);
 
       final balances = BalancesModel.fromMap(response.data ?? {});
 
@@ -112,19 +124,17 @@ class TransactionRepositoryImpl implements TransactionRepository {
   }
 
   @override
-   Future<List<TransactionModel>> getLatestTransactions() async {
-     try {
-       final response = await client
-           .query(QueryOptions(document: gql(qGetLatestTransactions)));
- 
-       final parsedData = List.from(response.data?['transaction'] ?? []);
- 
-       final transactions =
-           parsedData.map((e) => TransactionModel.fromMap(e)).toList();
-       return transactions;
-     } catch (e) {
-       rethrow;
-     }
-   }
-}
+  Future<List<TransactionModel>> getLatestTransactions() async {
+    try {
+      final response = await graphqlService.read(path: qGetLatestTransactions);
 
+      final parsedData = List.from(response.data?['transaction'] ?? []);
+
+      final transactions =
+          parsedData.map((e) => TransactionModel.fromMap(e)).toList();
+      return transactions;
+    } catch (e) {
+      rethrow;
+    }
+  }
+}

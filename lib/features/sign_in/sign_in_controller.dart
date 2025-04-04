@@ -9,11 +9,9 @@ import 'package:financy_app/services/secure_storage.dart';
 class SignInController extends ChangeNotifier {
   final SecureStorage secureStorage;
   final AuthService authService;
-  final GraphQLService graphQLService;
   SignInController({
     required this.secureStorage,
     required this.authService,
-    required this.graphQLService,
   });
 
   SignInState _state = SignInStateInitial();
@@ -39,8 +37,6 @@ class SignInController extends ChangeNotifier {
 
       if (user.id != null) {
         await secureStorage.write(key: "CURRENT_USER", value: user.toJson());
-
-        await graphQLService.init();
 
         _changeState(SignInStateSuccess());
       } else {
