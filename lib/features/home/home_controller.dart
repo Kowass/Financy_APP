@@ -26,11 +26,11 @@ class HomeController extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> getAllTransactions() async {
+  Future<void> getLatestTransactions() async {
     _changeState(HomeStateLoading());
 
     try {
-      _transactions = await _transactionRepository.getAllTransaction();
+      _transactions = await _transactionRepository.getAllTransactions(limit: 10, offset: 0);
       _changeState(HomeStateSuccess());
     } catch (e) {
       _changeState(HomeStateError());

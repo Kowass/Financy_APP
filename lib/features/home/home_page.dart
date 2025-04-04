@@ -25,7 +25,7 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
-    homeController.getAllTransactions();
+    homeController.getLatestTransactions();
     balanceController.getBalances();
   }
 
@@ -68,27 +68,27 @@ class _HomePageState extends State<HomePage> {
                 ),
                 Expanded(
                   child: AnimatedBuilder(
-                      animation: homeController,
-                      builder: (context, _) {
-                        if (homeController.state is HomeStateLoading) {
-                          return const CustomCircularProgressIndicator(
-                              color: AppColors.green);
-                        } else if (homeController.state is HomeStateError) {
-                          return Center(
-                            child: Text('An error has occurred.'),
-                          );
-                        }
-                        if (homeController.transactions.isEmpty) {
-                          return Center(
-                            child:
-                                Text('There is no transactions at this time.'),
-                          );
-                        }
+                    animation: homeController,
+                    builder: (context, _) {
+                      if (homeController.state is HomeStateLoading) {
+                        return const CustomCircularProgressIndicator(
+                            color: AppColors.green);
+                      } else if (homeController.state is HomeStateError) {
+                        return Center(
+                          child: Text('An error has occurred.'),
+                        );
+                      } else if (homeController.state is HomeStateSuccess &&
+                          homeController.transactions.isNotEmpty) {
                         return TransactionListView(
                           transactionList: homeController.transactions,
-                          itemCount: homeController.transactions.length,
+                          itemCount: homeController.transactions.length >= 10 ? 10 : homeController.transactions.length,
                         );
-                      }),
+                      }
+                      return Center(
+                        child: Text('There is no transactions at this time.'),
+                      );
+                    },
+                  ),
                 ),
               ],
             ),

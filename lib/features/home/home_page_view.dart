@@ -55,7 +55,7 @@ class _HomePageViewState extends State<HomePageView> {
         onPressed: () async {
           final result = await Navigator.pushNamed(context, '/transaction');
           if (result != null) {
-            homeController.getAllTransactions();
+            homeController.getLatestTransactions();
             balanceController.getBalances();
           }
         },

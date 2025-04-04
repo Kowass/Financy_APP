@@ -4,7 +4,7 @@ extension PageControllerExt on PageController {
   static int _selectedIndex = 0;
 
   int get selectedBottomAppBarItemIndex {
-    final newIndex = page ?? 0;
+    final newIndex = page ?? _selectedIndex;
     if(newIndex > 1){
       return(newIndex + 1).toInt();
     }
