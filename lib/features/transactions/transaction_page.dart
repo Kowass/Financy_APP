@@ -85,10 +85,10 @@ class _TransactionPageState extends State<TransactionPage>
       if (_transactionController.state is TransactionStateSuccess) {
         Navigator.of(context).pop();
       }
-      if(_transactionController.state is TransactionStateError){
+      if (_transactionController.state is TransactionStateError) {
         final error = _transactionController.state as TransactionStateError;
-        showCustomSnackBar(context: 
-        context, text: error.message, type: SnackBarType.error);
+        showCustomSnackBar(
+            context: context, text: error.message, type: SnackBarType.error);
       }
     });
   }
@@ -303,6 +303,9 @@ class _TransactionPageState extends State<TransactionPage>
                                   .replaceAll('\$', '')
                                   .replaceAll('.', '')
                                   .replaceAll(',', '.'));
+
+                              final now = DateTime.now().millisecondsSinceEpoch;
+
                               final newTransaction = TransactionModel(
                                 category: _categoryController.text,
                                 description: _descriptionController.text,
@@ -312,6 +315,7 @@ class _TransactionPageState extends State<TransactionPage>
                                 date: _date != null
                                     ? _date!.millisecondsSinceEpoch
                                     : DateTime.now().millisecondsSinceEpoch,
+                                createdAt: widget.transaction?.createdAt ?? now,
                                 status: value,
                                 id: widget.transaction?.id,
                               );

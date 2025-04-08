@@ -26,6 +26,8 @@ abstract class TransactionRepository {
   Future<List<TransactionModel>> getLatestTransactions();
 
   Future<BalancesModel> getBalances();
+
+  Future<void> deleteTransaction();
 }
 
 class TransactionRepositoryImpl implements TransactionRepository {
@@ -42,22 +44,15 @@ class TransactionRepositoryImpl implements TransactionRepository {
   ) async {
     try {
       final response = await graphqlService.create(params: {
-        "category": transaction.category,
-        "date":
-            DateTime.fromMillisecondsSinceEpoch(transaction.date).toString(),
-        "description": transaction.description,
-        "status": transaction.status,
-        "value": transaction.value,
+        ...transaction.toMap(),
         "user_id": userId,
       }, path: mAddNewTransaction);
 
-      final parsedData = TransactionModel.fromMap(
-          response.data?["insert_transaction_one"] ?? {});
-
-      if (parsedData.id != null) {
-        return true;
+      if (response.data == null || response.hasException) {
+        throw Exception(response.exception);
       }
-      throw Exception(response.exception);
+
+      return true;
     } catch (e) {
       rethrow;
     }
@@ -67,22 +62,14 @@ class TransactionRepositoryImpl implements TransactionRepository {
   Future<bool> updateTransaction(TransactionModel transaction) async {
     try {
       final response = await graphqlService.update(params: {
-        "id": transaction.id,
-        "category": transaction.category,
-        "date":
-            DateTime.fromMillisecondsSinceEpoch(transaction.date).toString(),
-        "description": transaction.description,
-        "status": transaction.status,
-        "value": transaction.value,
+        ...transaction.toMap(),
       }, path: mUpdateTransaction);
 
-      final parsedData = TransactionModel.fromMap(
-          response.data?["update_transaction_by_pk"] ?? {});
-
-      if (parsedData.id != null) {
-        return true;
+      if (response.data == null || response.hasException) {
+        throw Exception(response.exception);
       }
-      throw Exception(response.exception);
+
+      return true;
     } catch (e) {
       rethrow;
     }
@@ -112,8 +99,7 @@ class TransactionRepositoryImpl implements TransactionRepository {
   @override
   Future<BalancesModel> getBalances() async {
     try {
-      final response =
-          await graphqlService.read(path: qGetBalance);
+      final response = await graphqlService.read(path: qGetBalance);
 
       final balances = BalancesModel.fromMap(response.data ?? {});
 
@@ -136,5 +122,11 @@ class TransactionRepositoryImpl implements TransactionRepository {
     } catch (e) {
       rethrow;
     }
+  }
+  
+  @override
+  Future<void> deleteTransaction() {
+    // TODO: implement deleteTransaction
+    throw UnimplementedError();
   }
 }

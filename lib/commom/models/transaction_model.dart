@@ -1,10 +1,14 @@
 import 'dart:convert';
 
+import 'package:financy_app/commom/extensions/date_formatter.dart';
+import 'package:uuid/uuid.dart';
+
 class TransactionModel {
    final String description;
    final String category;
    final double value;
    final int date;
+   final int createdAt;
    final bool status;
    final String? id;
    TransactionModel({
@@ -12,6 +16,7 @@ class TransactionModel {
      required this.description,
      required this.value,
      required this.date,
+     required this.createdAt,
      required this.status,
      this.id,
    });
@@ -21,9 +26,10 @@ class TransactionModel {
        'description': description,
        'category': category,
        'value': value,
-       'date': date,
+       'date': DateTime.fromMillisecondsSinceEpoch(date).formatISOTime,
+       'created_at': DateTime.fromMillisecondsSinceEpoch(createdAt).formatISOTime,
        'status': status,
-       'id': id,
+       'id': id ?? const Uuid().v4(),
      };
    }
  
@@ -33,6 +39,8 @@ class TransactionModel {
        category: map['category'] as String,
        value: double.tryParse(map['value'].toString()) ?? 0,
        date: DateTime.parse(map['date'] as String).millisecondsSinceEpoch,
+       createdAt:
+          DateTime.parse(map['created_at'] as String).millisecondsSinceEpoch,
        status: map['status'] as bool,
        id: map['id'] as String?,
      );
@@ -51,6 +59,7 @@ class TransactionModel {
          other.category == category &&
          other.value == value &&
          other.date == date &&
+         other.createdAt == createdAt &&
          other.status == status &&
          other.id == id;
    }
@@ -61,7 +70,28 @@ class TransactionModel {
          category.hashCode ^
          value.hashCode ^
          date.hashCode ^
+         createdAt.hashCode ^
          status.hashCode ^
          id.hashCode;
    }
+
+   TransactionModel copyWith({
+    String? description,
+    String? category,
+    double? value,
+    int? date,
+    bool? status,
+    int? createdAt,
+    String? id,
+  }) {
+    return TransactionModel(
+      description: description ?? this.description,
+      category: category ?? this.category,
+      value: value ?? this.value,
+      date: date ?? this.date,
+      status: status ?? this.status,
+      createdAt: createdAt ?? this.createdAt,
+      id: id ?? this.id ?? const Uuid().v4(),
+    );
+  }
  }
